@@ -1,0 +1,12 @@
+discord.py
+aiohttp
+asyncio
+Cybernator
+oauth2client
+apiclient
+httplib2
+google-api-python-client
+bs4
+lxml
+heroku3
+memory_profiler
