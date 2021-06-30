@@ -92,9 +92,6 @@ def start(services, session):
                                                                             category=category)
                             await chan.set_permissions(message.guild.default_role,
                                                        connect=False,
-                                                       view_channel=False)
-                            await chan.set_permissions(rolez["bedwars"],
-                                                       connect=False,
                                                        view_channel=True)
                             perm_roles.append(created_role)
                             for perm in perm_roles:
@@ -105,9 +102,6 @@ def start(services, session):
                         else:
                             chan = await message.guild.create_voice_channel(name=team[1])
                             await chan.set_permissions(message.guild.default_role,
-                                                       connect=False,
-                                                       view_channel=False)
-                            await chan.set_permissions(rolez["bedwars"],
                                                        connect=False,
                                                        view_channel=True)
                             perm_roles.append(created_role)
