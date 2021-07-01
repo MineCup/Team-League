@@ -183,14 +183,17 @@ def start(services, session):
 
             if message.channel == channels["roles"] and "@&" in message.content:
                 role = message.guild.get_role(int(message.content[3:-1].replace(">", "")))
-                if role.name != "BedWars" and str(role.color) == "#787d85":
+                print(role.name)
+                print(message.author.roles)
+                if role.name != "bedwars" and str(role.color) == "#787d85":
                     valuess = services["bot"].spreadsheets().values().get(
                         spreadsheetId=sheet["team_league"],
                         range=f'userlist!A2:C150',
                         majorDimension='ROWS'
                     ).execute()["values"]
-                    if str(message.author.roles[1]) != "BedWars":
-                        await message.author.remove_roles(message.author.roles[1])
+                    if len(message.author.roles) > 1:
+                        if message.author.roles[1].color == "#787d85":
+                            await message.author.remove_roles(message.author.roles[1])
                     for i in range(len(valuess)):
                         if valuess[i][0].lower() == role.name.lower():
                             print(valuess[i][2])
