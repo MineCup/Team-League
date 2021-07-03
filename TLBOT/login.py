@@ -1,6 +1,7 @@
 from time import sleep
 from requests import get, Session
 from TLBOT.config import token, user
+from bs4 import BeautifulSoup
 
 
 def login():
