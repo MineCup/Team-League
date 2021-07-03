@@ -28,4 +28,13 @@ def login():
     account = session.get(url="https://cp.vimeworld.ru/index")
     if "MineCup" in account.text:
         print("Сессия авторизована.")
+        payload = s.get("https://cp.vimeworld.ru/real?paylog") #просмотр транзакций
+        soup = BeautifulSoup(payload.text, 'lxml')
+        vims = 0
+        for tag in soup.find_all("b"):
+            if "." in tag.text:
+            vims = tag.text[:-3]
+            break
+        print(vims)
+        send_vim = s.post("https://cp.vimeworld.ru/real?give", data=send_vimers) #отправка вимеров
     return session
