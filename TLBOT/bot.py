@@ -75,9 +75,6 @@ def start(services, session):
         async def on_message(self, message):
             if message.author == self.user:
                 return
-            
-            if "tradeoffer" in message.content:
-                await message.author.ban(reason="Скам вещей в стим.", delete_message_days=1)
 
             if message.content.startswith("*addteam"):
                 if rolez["org2"] in message.author.roles or rolez["org"] in message.author.roles:
