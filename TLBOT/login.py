@@ -1,30 +1,3 @@
-import requests
-from bs4 import BeautifulSoup
-
-send_vimers = {"usrnm": "FQGM",
-               "amount": 1,
-               "process": ""}
-
-url_login = "https://cp.vimeworld.ru/login"  # Адрес личного кабинета VimeWorld
-url_vimers =  # Адрес передачи вимеров
-url_payload = "https://cp.vimeworld.ru/real?paylog"  # Адрес транзакций
-
-cookies = requests.cookies.RequestsCookieJar()  # куки
-cookies.set(name='PHPSESSID', value='t2t50i25e2f98tvvc1ep9nno11', domain='.vimeworld.ru',
-            path='/')  # логин через PHPSESSID
-
-s = requests.Session()  # начало сессии
-s.cookies = cookies
-payload = s.get("https://cp.vimeworld.ru/real?paylog")  # просмотр транзакций
-soup = BeautifulSoup(payload.text, 'lxml')
-vims = 0
-for tag in soup.find_all("b"):
-    if "." in tag.text:
-        vims = tag.text[:-3]
-        break
-print(vims)
-send_vim = s.post("https://cp.vimeworld.ru/real?give", data=send_vimers)  # отправка вимеров
-
 from time import sleep
 from requests import get, Session
 from TLBOT.config import token, user
