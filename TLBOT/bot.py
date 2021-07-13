@@ -564,8 +564,8 @@ def start(services, session):
                                             description=f"**{mess[1]} vs {mess[2]}**\n**Ведущий: <@{message.author.id}>**\n**Карта: {mapp}**\n**ID: `{mm.id}`**",
                                             color=3553599)
                                 emb.set_footer(text="""1️⃣ - победила первая команда
-    2️⃣ - победила вторая команда
-    ⏹️- отмена игры""")
+2️⃣ - победила вторая команда
+⏹️- отмена игры""")
                                 m = await channels["match_logs"].send(embed=emb)
                                 await sleep(0.2)
                                 await m.add_reaction("1️⃣")
