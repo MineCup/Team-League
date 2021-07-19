@@ -182,31 +182,26 @@ def start(services, session):
                                                     color=3553599))
 
             if message.channel == channels["roles"] and "@&" in message.content:
-                role = message.guild.get_role(int(message.content[3:-1].replace(">", "")))
-                print(role.name)
-                print(message.author.roles)
-                if role.name != "bedwars" and str(role.color) == "#787d85":
-                    valuess = services["bot"].spreadsheets().values().get(
-                        spreadsheetId=sheet["team_league"],
-                        range=f'userlist!A2:C150',
-                        majorDimension='ROWS'
-                    ).execute()["values"]
-                    if len(message.author.roles) > 1:
-                        if message.author.roles[1].color == "#787d85":
-                            await message.author.remove_roles(message.author.roles[1])
-                    for i in range(len(valuess)):
-                        if valuess[i][0].lower() == role.name.lower():
-                            print(valuess[i][2])
-                            if valuess[i][2] == "1":
+                role = message.guild.get_role(int(message.content[3:-1]))
+                if str(role.color) == "#787d85":
+                    valuess = services["bot"].spreadsheets().values().get(spreadsheetId=sheet["team_league"],
+                                                                          range=f'userlist!A2:C150',
+                                                                          majorDimension='ROWS'
+                                                                          ).execute()["values"]
+                    for value in valuess:
+                        if value[0].lower() == role.name.lower():
+                            if value[2] == "1":
                                 emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
                                             description=f"Роль <@&{role.id}> не выдана. Команда заблокировала выдачу роли.",
                                             colour=3553599)
                                 await message.channel.send(embed=emb)
                             else:
+                                for author_role in message.author.roles:
+                                    if author_role.color == "#787d85":
+                                        await message.author.remove_roles(author_role)
                                 await message.author.add_roles(role)
-                                await sleep(5)
                                 emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
-                                            description=f"Роль <@&{message.author.roles[1].id}> выдана.",
+                                            description=f"Роль <@&{role.id}> выдана.",
                                             colour=3553599)
                                 await message.channel.send(embed=emb)
                 else:
