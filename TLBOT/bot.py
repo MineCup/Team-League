@@ -182,6 +182,7 @@ def start(services, session):
                                                     color=3553599))
 
             if message.channel == channels["roles"] and "@&" in message.content:
+                removed = "Убраны роли:"
                 role = message.guild.get_role(int(message.content[3:-1]))
                 if str(role.color) == "#787d85":
                     valuess = services["bot"].spreadsheets().values().get(spreadsheetId=sheet["team_league"],
@@ -197,12 +198,16 @@ def start(services, session):
                                 await message.channel.send(embed=emb)
                             else:
                                 for author_role in message.author.roles:
-                                    if author_role.color == "#787d85":
+                                    if str(author_role.color) == "#787d85":
+                                        print(f"Убрана роль: {author_role.name}")
                                         await message.author.remove_roles(author_role)
+                                        removed += f" {author_role.name}"
                                 await message.author.add_roles(role)
                                 emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
                                             description=f"Роль <@&{role.id}> выдана.",
                                             colour=3553599)
+                                if removed != "Убраны роли:":
+                                    emb.set_footer(text=removed)
                                 await message.channel.send(embed=emb)
                 else:
                     emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
