@@ -84,7 +84,8 @@ def start(services, session):
                     perm_roles = [rolez["ss"], rolez["helper2"], rolez["org"], rolez["org2"]]
                     if len(team) > 1:
                         created_role = await message.guild.create_role(name=team[1],
-                                                                       colour=0x787d85)
+                                                                       colour=0x787d85,
+                                                                       mentionable=True)
                         await sleep(.2)
                         if len(team) > 2:
                             category = message.guild.get_channel(int(team[2]))
