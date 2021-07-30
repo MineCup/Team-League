@@ -581,86 +581,89 @@ def start(services, session):
                                 break
 
         async def on_raw_reaction_add(self, payload):
-            if payload.channel_id == channels["match_logs"].id:
-                channel = self.get_channel(payload.channel_id)
-                message = await channel.fetch_message(payload.message_id)
-                member = utils.get(message.guild.members, id=payload.user_id)
-                mess = message.embeds[0].description
-                if str(member.id) in mess or rolez["org2"] in member.roles:
-                    emoji = str(payload.emoji)
-                    mes = mess.split("\n")
-                    mes[1] = mes[1].replace("**Ведущий: <@", "")
-                    mes[1] = mes[1].replace(">**", "")
-                    if emoji == "⏹️":
-                        emb = Embed(title="════₪ TEAM LEAGUE ₪════",
-                                    url=f"https://discord.com/channels/856327254178791424/858273631033360384/{mes[3][7:-3]}",
-                                    description=f"**Отмена игры**\n**Написал команду: <@{mes[1]}>**\n{mes[3]}",
-                                    color=3553599)
-                        await message.edit(embed=emb)
-                        await message.clear_reactions()
-                    else:
-
-                        mes[0] = mes[0].replace("**", "")
-                        mes[0] = mes[0].replace("<@&", "")
-                        mes[0] = mes[0].replace(">", "")
-                        mes[0] = mes[0].split(" vs ")
-                        team1 = mes[0][0]
-                        team2 = mes[0][1]
-                        role1 = client.get_guild(856327254178791424).get_role(int(team1))
-                        role2 = client.get_guild(856327254178791424).get_role(int(team2))
-
-                        if emoji == "1️⃣":
-                            X = 1
-                            valuess = services["bot"].spreadsheets().values().get(
-                                spreadsheetId=sheet["team_league"],
-                                range=f'matches!A{str(X)}:A1000',
-                                majorDimension='COLUMNS'
-                            ).execute()
-                            try:
-                                X += len(valuess["values"][0])
-                            except:
-                                pass
-                            services["bot"].spreadsheets().values().batchUpdate(
-                                spreadsheetId=sheet["team_league"],
-                                body={
-                                    "valueInputOption": "USER_ENTERED",
-                                    "data": [{"range": f'matches!A{str(X)}:G{str(X)}',
-                                              "majorDimension": "ROWS",
-                                              "values": [[str(role1), str(role2), str(mes[1]), str(mes[3][7:-3]),
-                                                          str(datetime.now())[:-7]]]}]}).execute()
+            try:
+                if payload.channel_id == channels["match_logs"].id:
+                    channel = self.get_channel(payload.channel_id)
+                    message = await channel.fetch_message(payload.message_id)
+                    member = utils.get(message.guild.members, id=payload.user_id)
+                    mess = message.embeds[0].description
+                    if str(member.id) in mess or rolez["org2"] in member.roles:
+                        emoji = str(payload.emoji)
+                        mes = mess.split("\n")
+                        mes[1] = mes[1].replace("**Ведущий: <@", "")
+                        mes[1] = mes[1].replace(">**", "")
+                        if emoji == "⏹️":
                             emb = Embed(title="════₪ TEAM LEAGUE ₪════",
                                         url=f"https://discord.com/channels/856327254178791424/858273631033360384/{mes[3][7:-3]}",
-                                        description=f"**Победитель: <@&{team1}>**\n**Проигравший: <@&{team2}>**\n**Провел игру"
-                                                    f": <@{mes[1]}>**\n{mes[3]}",
+                                        description=f"**Отмена игры**\n**Написал команду: <@{mes[1]}>**\n{mes[3]}",
                                         color=3553599)
                             await message.edit(embed=emb)
                             await message.clear_reactions()
-                        elif emoji == "2️⃣":
-                            X = 2
-                            valuess = services["bot"].spreadsheets().values().get(
-                                spreadsheetId=sheet["team_league"],
-                                range=f'matches!A{str(X)}:A1000',
-                                majorDimension='COLUMNS'
-                            ).execute()
-                            try:
-                                X += len(valuess["values"][0])
-                            except:
-                                pass
-                            services["bot"].spreadsheets().values().batchUpdate(
-                                spreadsheetId=sheet["team_league"],
-                                body={
-                                    "valueInputOption": "USER_ENTERED",
-                                    "data": [{"range": f'matches!A{str(X)}:G{str(X)}',
-                                              "majorDimension": "ROWS",
-                                              "values": [[str(role2), str(role1), str(mes[1]), str(mes[3][7:-3]),
-                                                          str(datetime.now())[:-7]]]}]}).execute()
-                            emb = Embed(title="════₪ TEAM LEAGUE ₪════",
-                                        url=f"https://discord.com/channels/856327254178791424/858273631033360384/{mes[3][7:-3]}",
-                                        description=f"**Победитель: <@&{team2}>**\n**Проигравший: <@&{team1}>**\n**Провел игру"
-                                                    f": <@{mes[1]}>**\n{mes[3]}",
-                                        color=3553599)
-                            await message.edit(embed=emb)
-                            await message.clear_reactions()
+                        else:
+    
+                            mes[0] = mes[0].replace("**", "")
+                            mes[0] = mes[0].replace("<@&", "")
+                            mes[0] = mes[0].replace(">", "")
+                            mes[0] = mes[0].split(" vs ")
+                            team1 = mes[0][0]
+                            team2 = mes[0][1]
+                            role1 = client.get_guild(856327254178791424).get_role(int(team1))
+                            role2 = client.get_guild(856327254178791424).get_role(int(team2))
+    
+                            if emoji == "1️⃣":
+                                X = 1
+                                valuess = services["bot"].spreadsheets().values().get(
+                                    spreadsheetId=sheet["team_league"],
+                                    range=f'matches!A{str(X)}:A1000',
+                                    majorDimension='COLUMNS'
+                                ).execute()
+                                try:
+                                    X += len(valuess["values"][0])
+                                except:
+                                    pass
+                                services["bot"].spreadsheets().values().batchUpdate(
+                                    spreadsheetId=sheet["team_league"],
+                                    body={
+                                        "valueInputOption": "USER_ENTERED",
+                                        "data": [{"range": f'matches!A{str(X)}:G{str(X)}',
+                                                  "majorDimension": "ROWS",
+                                                  "values": [[str(role1), str(role2), str(mes[1]), str(mes[3][7:-3]),
+                                                              str(datetime.now())[:-7]]]}]}).execute()
+                                emb = Embed(title="════₪ TEAM LEAGUE ₪════",
+                                            url=f"https://discord.com/channels/856327254178791424/858273631033360384/{mes[3][7:-3]}",
+                                            description=f"**Победитель: <@&{team1}>**\n**Проигравший: <@&{team2}>**\n**Провел игру"
+                                                        f": <@{mes[1]}>**\n{mes[3]}",
+                                            color=3553599)
+                                await message.edit(embed=emb)
+                                await message.clear_reactions()
+                            elif emoji == "2️⃣":
+                                X = 2
+                                valuess = services["bot"].spreadsheets().values().get(
+                                    spreadsheetId=sheet["team_league"],
+                                    range=f'matches!A{str(X)}:A1000',
+                                    majorDimension='COLUMNS'
+                                ).execute()
+                                try:
+                                    X += len(valuess["values"][0])
+                                except:
+                                    pass
+                                services["bot"].spreadsheets().values().batchUpdate(
+                                    spreadsheetId=sheet["team_league"],
+                                    body={
+                                        "valueInputOption": "USER_ENTERED",
+                                        "data": [{"range": f'matches!A{str(X)}:G{str(X)}',
+                                                  "majorDimension": "ROWS",
+                                                  "values": [[str(role2), str(role1), str(mes[1]), str(mes[3][7:-3]),
+                                                              str(datetime.now())[:-7]]]}]}).execute()
+                                emb = Embed(title="════₪ TEAM LEAGUE ₪════",
+                                            url=f"https://discord.com/channels/856327254178791424/858273631033360384/{mes[3][7:-3]}",
+                                            description=f"**Победитель: <@&{team2}>**\n**Проигравший: <@&{team1}>**\n**Провел игру"
+                                                        f": <@{mes[1]}>**\n{mes[3]}",
+                                            color=3553599)
+                                await message.edit(embed=emb)
+                                await message.clear_reactions()
+            except:
+                pass
 
     client = MyClient()
     client.run(token["bot"])
