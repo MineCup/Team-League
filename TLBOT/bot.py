@@ -546,7 +546,7 @@ def start(services, session):
                                      use_remove_reaction=False, delete_message=True)
                     await page.start()
 
-            if message.content.startswith("/battle") and message.channel == channels["team_league"]:
+            if message.content.startswith("/battle") and message.channel == channels["team_league"] and 1 == 2:
                 now = datetime.now()
                 mess = message.content.split()
                 for role in message.author.roles:
