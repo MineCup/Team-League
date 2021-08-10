@@ -61,9 +61,12 @@ def start(services, session):
                 channels[channel] = guild.get_channel(channels[channel])
             for role in rolez:
                 rolez[role] = guild.get_role(rolez[role])
-            messages = await channels["rating"].history(limit=100).flatten()
-            if len(messages) > 1:
-                await channels["rating"].purge(limit=len(messages) - 1)
+            try:
+                messages = await channels["rating"].history(limit=100).flatten()
+                if len(messages) > 1:
+                    await channels["rating"].purge(limit=len(messages) - 1)
+            except:
+                pass
             while True:
                 await rating(services)
                 print(f"MiB: {memory_usage()[0]}")
