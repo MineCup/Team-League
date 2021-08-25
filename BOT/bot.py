@@ -53,7 +53,7 @@ def start(services, session):
 
     async def helperVariant(message, variant, helpers, answer):
         variant = variant.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
-        
+
         for helper in helpers:
             if variant == helper[2] or variant == helper[1]:
                 name = f"═══₪ {helper[1]} ₪═══"
@@ -312,7 +312,16 @@ def start(services, session):
 
             if message.content.startswith("/team") and message.channel.id in bw_ids:
                 if message.content == "/team":
-                    role = message.guild.get_role(message.author.roles[1].id)
+                    try:
+                        role = message.guild.get_role(message.author.roles[1].id)
+                    except:
+                        emb = Embed(colour=3553599)
+                        emb.description = """**══₪ Просмотр команд ₪══**
+                            ⟫ `/team {название команды}` отправляет никнеймы участников команды.
+                            ⟫ `💚` аккаунт **в игре**
+                            ⟫ `💛` аккаунт **не в сети**"""
+                        await message.channel.send(embed=emb)
+                        return
                     if str(role.color) == "#787d85":
                         await checkTeam(message, role.name)
                     else:
@@ -525,13 +534,13 @@ def start(services, session):
                                                     color=3553599))
                     else:
                         valuess = services["bot"].spreadsheets().values().get(
-                            spreadsheetId=sheet["team_league"],
+                            spreadsheetId=sheet,
                             range=f'userlist!A2:B150',
                             majorDimension='ROWS'
                         ).execute()["values"]
                         for i in range(len(valuess)):
                             if valuess[i][0].lower() == user_role.name.lower():
-                                services["bot"].spreadsheets().values().batchUpdate(spreadsheetId=sheet["team_league"],
+                                services["bot"].spreadsheets().values().batchUpdate(spreadsheetId=sheet,
                                                                                     body={
                                                                                         "valueInputOption": "USER_ENTERED",
                                                                                         "data": [
@@ -577,7 +586,7 @@ def start(services, session):
                             if emoji == "1️⃣":
                                 X = 1
                                 valuess = services["bot"].spreadsheets().values().get(
-                                    spreadsheetId=sheet["team_league"],
+                                    spreadsheetId=sheet,
                                     range=f'matches!A{str(X)}:A1000',
                                     majorDimension='COLUMNS'
                                 ).execute()
@@ -586,7 +595,7 @@ def start(services, session):
                                 except:
                                     pass
                                 services["bot"].spreadsheets().values().batchUpdate(
-                                    spreadsheetId=sheet["team_league"],
+                                    spreadsheetId=sheet,
                                     body={
                                         "valueInputOption": "USER_ENTERED",
                                         "data": [{"range": f'matches!A{str(X)}:G{str(X)}',
@@ -604,7 +613,7 @@ def start(services, session):
                             elif emoji == "2️⃣":
                                 X = 2
                                 valuess = services["bot"].spreadsheets().values().get(
-                                    spreadsheetId=sheet["team_league"],
+                                    spreadsheetId=sheet,
                                     range=f'matches!A{str(X)}:A1000',
                                     majorDimension='COLUMNS'
                                 ).execute()
@@ -613,7 +622,7 @@ def start(services, session):
                                 except:
                                     pass
                                 services["bot"].spreadsheets().values().batchUpdate(
-                                    spreadsheetId=sheet["team_league"],
+                                    spreadsheetId=sheet,
                                     body={
                                         "valueInputOption": "USER_ENTERED",
                                         "data": [{"range": f'matches!A{str(X)}:G{str(X)}',
