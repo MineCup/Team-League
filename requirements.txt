@@ -8,3 +8,4 @@ httplib2
 google-api-python-client
 bs4
 lxml
+memory_profiler
