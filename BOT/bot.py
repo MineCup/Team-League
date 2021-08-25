@@ -448,7 +448,7 @@ def start(services, session):
                 for role in message.author.roles:
                     for z in rolez:
                         if role == rolez[z] and role != rolez["ss"]:
-                            if now.hour:
+                            if 9 < now.hour < 20:
                                 maps = await channels["map_pool"].fetch_message(858278776236015638)
                                 maps = maps.content.split("\n")
                                 mapp = maps[randint(0, len(maps) - 1)]
@@ -468,13 +468,13 @@ def start(services, session):
                                 await m.add_reaction("1️⃣")
                                 await m.add_reaction("2️⃣")
                                 await m.add_reaction("⏹️")
-                                break
+                                return
                             else:
                                 emb = Embed(title="══₪ TEAM LEAGUE ₪══",
                                             description=f"**Пользоваться `/battle` можно с 13:00 по 23:00 по мск.**",
                                             color=3553599)
                                 await message.channel.send(embed=emb)
-                                break
+                                return
 
             if message.content.startswith("/addplayer") and message.channel == channels["payload"]:
                 start_time = round(time()) + 3500 * 3
