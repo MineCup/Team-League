@@ -6,6 +6,7 @@ from asyncio import sleep
 from bs4 import BeautifulSoup
 from Cybernator import Paginator
 from discord import Client, Embed, Intents, utils
+from memory_profiler import memory_usage
 from BOT.config import token, channels, rolez
 
 
@@ -191,6 +192,10 @@ def start(services, session):
 
         async def on_message(self, message):
             if message.author == self.user:
+                return
+            
+            if rolez["tech"] in message.author.roles and message.content == "*status":
+                await message.channel.send(f"MiB: {memory_usage()[0]}")
                 return
 
             if message.content.startswith("*addteam"):
