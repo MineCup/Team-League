@@ -227,8 +227,13 @@ def start(services, session):
                 for perm in permRoles:
                     await chan.set_permissions(perm, connect=True, view_channel=True)
 
-                await wait.edit(
-                    content=f"Создание комнаты <#{chan.id}> для команды <@&{permRoles[-1].id}> успешно завершено.")
+                if not category:
+                    await wait.edit(
+                        content=f"Создание комнаты <#{chan.id}> для команды <@&{permRoles[-1].id}> успешно завершено.")
+                else:
+                    await wait.edit(
+                        content=f"Создание комнаты <#{chan.id}> для команды <@&{permRoles[-1].id}> успешно завершено.\n"
+                                f"В категорию <#{category.id}> можно добавить {len(category.channels)} каналов.")
                 return
 
             if message.channel == channels["roles"]:
