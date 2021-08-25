@@ -1,6 +1,6 @@
-from TLBOT.login import login
-from TLBOT.table import table
-from TLBOT.bot import start
+from BOT.bot import start
+from BOT.table import table
+from BOT.login import login
 
 
 def run():
