@@ -6,7 +6,7 @@ from asyncio import sleep
 from bs4 import BeautifulSoup
 from Cybernator import Paginator
 from discord import Client, Embed, Intents, utils
-from BOT.config_for_git import token, channels, rolez
+from BOT.config import token, channels, rolez
 
 
 def start(services, session):
