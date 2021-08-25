@@ -52,6 +52,8 @@ def start(services, session):
                     await message.channel.send(embed=emb)
 
     async def helperVariant(message, variant, helpers, answer):
+        variant = variant.replace("<", "").replace(">", "").replace("@", "").replace("!", "")
+        
         for helper in helpers:
             if variant == helper[2] or variant == helper[1]:
                 name = f"═══₪ {helper[1]} ₪═══"
