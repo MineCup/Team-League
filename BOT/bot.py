@@ -21,7 +21,10 @@ def start(services, session):
     async def teamSwitch(message, switch):
         switcher = ["открыта", "закрыта"]
         switcher2 = ["Закрыть: /close", "Открыть: /open"]
-        role = message.guild.get_role(message.author.roles[1].id)
+        try:
+            role = message.guild.get_role(message.author.roles[1].id)
+        except:
+            role = message.guild.get_role(message.author.roles[0].id)
         if str(role.color) != "#787d85":
             emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
                         description=f"У вас нет командной роли.",
@@ -73,11 +76,11 @@ def start(services, session):
         await message.channel.send(answer)
 
     async def membersStatusCheck(members):
-        async with ClientSession() as session:
+        async with ClientSession() as s:
             userIDs = ""
             members = members.replace(" ", "")
 
-            async with session.get(f"https://api.vimeworld.ru/user/name/{members}") as response:
+            async with s.get(f"https://api.vimeworld.ru/user/name/{members}") as response:
                 answer = await response.json()
                 if "error" in answer:
                     return "error"
@@ -86,8 +89,11 @@ def start(services, session):
                     userIDs += str(user["id"]) + ","
                 userIDs = userIDs[:-1]
 
-            async with session.get(f"https://api.vimeworld.ru/user/session/{userIDs}") as response:
+            async with s.get(f"https://api.vimeworld.ru/user/session/{userIDs}") as response:
                 answer = await response.json()
+                if "error" in answer:
+                    return "error"
+
                 members = {"Nickname": [],
                            "Session": []}
 
@@ -135,20 +141,20 @@ def start(services, session):
                 break
 
         if not team["Name"]:
-            emb = Embed(title="**══₪ TEAM LEAGUE ₪══**", description="Произошла ошибка в таблице [userlist]",
+            emb = Embed(title="**══₪ TEAM LEAGUE ₪══**", description="UserListSheet: Ваша команда удалена или еще не добавлена.",
                         color=3553599)
             await message.channel.send(embed=emb)
             return
 
         if not team["Position"]:
-            emb = Embed(title="**══₪ TEAM LEAGUE ₪══**", description="Произошла ошибка в таблице [rate]",
+            emb = Embed(title="**══₪ TEAM LEAGUE ₪══**", description="RateSheet: Ваша команда удалена или еще не добавлена.",
                         color=3553599)
             await message.channel.send(embed=emb)
             return
 
         answer = await membersStatusCheck(team["Members"])
         if answer == "error":
-            emb = Embed(title="**══₪ TEAM LEAGUE ₪══**", description="Произошла ошибка в составе игроков. [userlist]",
+            emb = Embed(title="**══₪ TEAM LEAGUE ₪══**", description="UserListSheet: Произошла ошибка в проверке состава игроков.",
                         color=3553599)
             await message.channel.send(embed=emb)
             return
@@ -193,7 +199,7 @@ def start(services, session):
         async def on_message(self, message):
             if message.author == self.user:
                 return
-            
+
             if rolez["tech"] in message.author.roles and message.content == "*status":
                 await message.channel.send(f"MiB: {memory_usage()[0]}")
                 return
