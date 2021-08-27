@@ -225,7 +225,7 @@ def start(services, session):
                             f'Игр: {team["Games"]}\n'
                             f'Звание: {team["Rank"]}\n'
                             f'Предупреждений: {team["Warnings"]}\n'
-                            f'{team["Block"]}**')
+                            f'{team["Block"]}')
         await message.channel.send(embed=emb)
         return
 
