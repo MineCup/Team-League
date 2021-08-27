@@ -609,7 +609,9 @@ def start(services, session):
                 return
             if payload.event_type != "REACTION_ADD":
                 return
-
+            if payload.channel_id != channels["match_logs"]:
+                return
+            
             channel = self.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             del channel
