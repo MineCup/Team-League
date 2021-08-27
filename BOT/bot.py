@@ -216,16 +216,16 @@ def start(services, session):
         nicknames = ""
         for i in range(len(team["Members"]["Nickname"])):
             if team["Members"]["Session"][i]:
-                nicknames += f'🟢 **{team["Members"]["Nickname"][i]}**\n'
+                nicknames += f'🟢 **`{team["Members"]["Nickname"][i]}`**\n'
             else:
-                nicknames += f'🔴 **{team["Members"]["Nickname"][i]}**\n'
+                nicknames += f'🔴 **`{team["Members"]["Nickname"][i]}`**\n'
         emb = Embed(title=f'**══₪ {team["Name"]} ₪══**',
                     description=nicknames, color=3553599)
-        emb.set_footer(text=f'**Рейтинг: {team["Rating"]} [{team["Position"]}/{len(rateList["values"]) + 1}]**\n'
-                            f'**Игр: {team["Games"]}**\n'
-                            f'**Звание: {team["Rank"]}**\n'
-                            f'**Предупреждений: {team["Warnings"]}**\n'
-                            f'**{team["Block"]}**')
+        emb.set_footer(text=f'Рейтинг: {team["Rating"]} [{team["Position"]}/{len(rateList["values"]) + 1}]\n'
+                            f'Игр: {team["Games"]}\n'
+                            f'Звание: {team["Rank"]}\n'
+                            f'Предупреждений: {team["Warnings"]}\n'
+                            f'{team["Block"]}**')
         await message.channel.send(embed=emb)
         return
 
@@ -285,10 +285,8 @@ def start(services, session):
                     return
 
                 if message.content.startswith("*addteam"):
-                    await message.delete()
-                    userRoles = message.author.roles
-                    if minecupRoles["org2"] not in userRoles and minecupRoles["org"] not in userRoles and minecupRoles[
-                        "tech"] not in userRoles:
+                    if minecupRoles["org2"] not in message.author.roles and minecupRoles["org"] \
+                            not in message.author.roles and minecupRoles["tech"] not in message.author.roles:
                         dell = await message.channel.send(
                             f"{message.author.mention}, Данная команда доступна для Организатор и выше.")
                         await dell.delete(delay=10)
@@ -534,74 +532,74 @@ def start(services, session):
                                     return
 
                 if message.content.startswith("/addplayer") and message.channel == channels["payload"]:
-                    start_time = round(time()) + 3500 * 3
-                    user_role = message.author.roles[1]
-                    if user_role.name == "BedWars":
+                    startTime = time() + 3500 * 3
+                    role = message.author.roles[1]
+
+                    if str(role.color) != "#787d85":
                         await message.channel.send(embed=Embed(title="══₪ Добавление игроков ₪══",
                                                                description=f"У вас нет командной роли.",
                                                                color=3553599))
+                        return
+
+                    nickname = message.content.split()
+                    if len(nickname) != 3:
+                        await message.channel.send(embed=Embed(title="══₪ Добавление игроков ₪══",
+                                                               description=f"Некорректный формат. `/addplayer (ник) (кто переводит)`",
+                                                               color=3553599))
+                        return
+
+                    mess = await message.channel.send(embed=Embed(title="══₪ Добавление игроков ₪══",
+                                                                  description=f"⏲️ Ожидание перевода от {nickname[-1]}. "
+                                                                              f"На перевод дается 5 минут",
+                                                                  color=3553599))
+
+                    while startTime + 300 > time() + 3500 * 3:
+                        payload = session.get("https://cp.vimeworld.ru/real?paylog")
+                        soup = BeautifulSoup(payload.text, 'lxml')
+                        transaction = soup.find_all("tr")[1].text.split("\n")
+                        transaction[2] = transaction[2].split()
+                        del soup, payload
+
+                        for i in range(len(month)):
+                            if transaction[2][1] == month[i]:
+                                transaction[2][1] = month_num[i]
+                                break
+
+                        if transaction[2][3][1] == ":":
+                            transaction[2][3] = f"0{transaction[2][3]}"
+
+                        transaction[2] = datetime.fromisoformat(
+                            f"{transaction[2][2]}-{transaction[2][1]}-{transaction[2][0]} {transaction[2][3]}:00").timestamp()
+
+                        if startTime < transaction[2]:
+                            if transaction[3] == "+30" and nickname[-1] in transaction[-2]:
+                                userList = services["bot"].spreadsheets().values().get(spreadsheetId=sheet,
+                                                                                       range=f'userlist!A2:B150',
+                                                                                       majorDimension='ROWS'
+                                                                                       ).execute()
+                                if "values" not in userList:
+                                    await mess.edit(embed=Embed(title="══₪ Добавление игроков ₪══",
+                                                                description=f"UserListSheet: Возникла ошибка. Сообщите организаторам.",
+                                                                color=3553599))
+
+                                for num, team in enumerate(userList["values"]):
+                                    if team[0].lower() == role.name.lower():
+                                        services["bot"].spreadsheets().values().batchUpdate(
+                                            spreadsheetId=sheet,
+                                            body={"valueInputOption": "USER_ENTERED",
+                                                  "data": [{"range": f'userlist!B{num + 2}',
+                                                            "majorDimension": "ROWS",
+                                                            "values": [[f"{team[1]}, {nickname[2]}"]]}]}).execute()
+                                        await mess.edit(embed=Embed(title="══₪ Добавление игроков ₪══",
+                                                                    description=f"Игрок {nickname[2]} добавлен в команду {role.mention}",
+                                                                    color=3553599))
+                                        return
+                        await sleep(5)
+
                     else:
-                        addp = message.content.split(" ")
-                        stop = False
-                        mess = await message.channel.send(embed=Embed(title="══₪ Добавление игроков ₪══",
-                                                                      description=f"⏲️ Ожидание перевода от {addp[2]}",
-                                                                      color=3553599))
-                        while start_time + 300 > round(time()) + 3500 * 3 and not stop:
-                            payload = session.get("https://cp.vimeworld.ru/real?paylog")
-                            soup = BeautifulSoup(payload.text, 'lxml')
-                            payload_list = []
-                            i = 0
-                            for tag in soup.find_all("tr"):
-                                if i != 0 and i < 10:
-                                    payload_list.append(tag.text.split("\n"))
-                                else:
-                                    if i >= 10:
-                                        break
-                                i += 1
-
-                            for ii in range(len(payload_list)):
-                                timee = payload_list[ii][2].split()
-                                for i in range(len(month)):
-                                    if str(timee[1]) == str(month[i]):
-                                        timee[1] = month_num[i]
-                                        break
-                                if timee[3][1] == ":":
-                                    timee[3] = f"0{timee[3]}"
-                                timee = f"{timee[2]}-{timee[1]}-{timee[0]} {timee[3]}:00"
-                                dt = datetime.fromisoformat(timee)
-                                payload_list[ii][2] = round(dt.timestamp())
-                            for ww in range(len(payload_list)):
-                                if round(start_time) < payload_list[ww][2]:
-                                    if addp[2].lower() in payload_list[ww][-2].lower() and payload_list[ww][
-                                        -3] == "+30":
-                                        stop = True
-                                        break
-                            await sleep(5)
-                        if start_time + 300 < round(time()) + 3500 * 3:
-                            await mess.edit(embed=Embed(title="══₪ Добавление игроков ₪══",
-                                                        description=f"Время вышло.",
-                                                        color=3553599))
-                        else:
-                            valuess = services["bot"].spreadsheets().values().get(
-                                spreadsheetId=sheet,
-                                range=f'userlist!A2:B150',
-                                majorDimension='ROWS'
-                            ).execute()["values"]
-                            for i in range(len(valuess)):
-                                if valuess[i][0].lower() == user_role.name.lower():
-                                    services["bot"].spreadsheets().values().batchUpdate(spreadsheetId=sheet,
-                                                                                        body={
-                                                                                            "valueInputOption": "USER_ENTERED",
-                                                                                            "data": [
-                                                                                                {
-                                                                                                    "range": f'userlist!B{i + 2}',
-                                                                                                    "majorDimension": "ROWS",
-                                                                                                    "values": [[
-                                                                                                        f"{valuess[i][1]}, {addp[1]}"]]}]}).execute()
-                            await mess.edit(embed=Embed(title="══₪ Добавление игроков ₪══",
-                                                        description=f"Игрок {addp[1]} добавлен в команду {user_role.mention}",
-                                                        color=3553599))
-
+                        await mess.edit(embed=Embed(title="══₪ Добавление игроков ₪══",
+                                                    description=f"Время вышло.",
+                                                    color=3553599))
                 return
 
         async def on_raw_reaction_add(self, payload):
