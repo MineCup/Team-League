@@ -9,6 +9,7 @@ from Cybernator import Paginator
 from discord import Client, Embed, Intents
 from memory_profiler import memory_usage
 from BOT.config import token, channels, minecupRoles
+from BOT.login import login
 
 
 def start(services, session):
@@ -276,10 +277,11 @@ def start(services, session):
                 return
 
         async def on_message(self, message):
+            global session
             if message.author.bot:
                 return
 
-            if message.guild:
+            if message.guild and minecupRoles["tech"] in message.author.roles:
                 if minecupRoles["tech"] in message.author.roles and message.content == "*status":
                     await message.channel.send(f"MiB: {memory_usage()[0]}")
                     return
@@ -480,14 +482,51 @@ def start(services, session):
                                     del now
 
                                     mess = message.content.split()
-                                    checkRole = message.guild.get_role(int(re.search(r'\d+', mess[1])[0]))
+                                    if len(mess) != 3:
+                                        emb = Embed(title="══₪ TEAM LEAGUE ₪══",
+                                                    description=f"**Ошибка в создании матча.**",
+                                                    color=3553599)
+                                        await message.channel.send(embed=emb)
+                                        return
+
+                                    first = re.search(r'\d+', mess[1])
+                                    if not first:
+                                        emb = Embed(title="══₪ TEAM LEAGUE ₪══",
+                                                    description=f"**Ошибка в выборе команды. {mess[1]}**",
+                                                    color=3553599)
+                                        await message.channel.send(embed=emb)
+                                        return
+                                    try:
+                                        checkRole = message.guild.get_role(int(first[0]))
+                                    except ValueError:
+                                        emb = Embed(title="══₪ TEAM LEAGUE ₪══",
+                                                    description=f"**Ошибка в выборе команды. {mess[1]}**",
+                                                    color=3553599)
+                                        await message.channel.send(embed=emb)
+                                        return
                                     if not checkRole:
                                         emb = Embed(title="══₪ TEAM LEAGUE ₪══",
                                                     description=f"**Ошибка в выборе команды. {mess[1]}**",
                                                     color=3553599)
                                         await message.channel.send(embed=emb)
                                         return
-                                    checkRole = message.guild.get_role(int(re.search(r'\d+', mess[2])[0]))
+
+                                    second = re.search(r'\d+', mess[2])
+                                    if not second:
+                                        emb = Embed(title="══₪ TEAM LEAGUE ₪══",
+                                                    description=f"**Ошибка в выборе команды. {mess[2]}**",
+                                                    color=3553599)
+                                        await message.channel.send(embed=emb)
+                                        return
+                                    try:
+                                        checkRole = message.guild.get_role(int(second[0]))
+                                    except ValueError:
+                                        emb = Embed(title="══₪ TEAM LEAGUE ₪══",
+                                                    description=f"**Ошибка в выборе команды. {mess[2]}**",
+                                                    color=3553599)
+                                        await message.channel.send(embed=emb)
+                                        return
+
                                     if not checkRole:
                                         emb = Embed(title="══₪ TEAM LEAGUE ₪══",
                                                     description=f"**Ошибка в выборе команды. {mess[2]}**",
@@ -556,7 +595,19 @@ def start(services, session):
                     while startTime + 300 > time() + 3500 * 3:
                         payload = session.get("https://cp.vimeworld.ru/real?paylog")
                         soup = BeautifulSoup(payload.text, 'lxml')
-                        transaction = soup.find_all("tr")[1].text.split("\n")
+                        transaction = soup.find_all("tr")
+                        if not transaction:
+                            session = login()
+                            payload = session.get("https://cp.vimeworld.ru/real?paylog")
+                            soup = BeautifulSoup(payload.text, 'lxml')
+                            transaction = soup.find_all("tr")
+                            if not transaction:
+                                await message.channel.send(embed=Embed(title="══₪ Добавление игроков ₪══",
+                                                                       description=f"Личный кабинет упал.",
+                                                                       color=3553599))
+                                return
+                            
+                        transaction = transaction[1].text.split("\n")
                         transaction[2] = transaction[2].split()
                         del soup, payload
 
@@ -609,9 +660,9 @@ def start(services, session):
                 return
             if payload.event_type != "REACTION_ADD":
                 return
-            if payload.channel_id != channels["match_logs"]:
+            if payload.channel_id != channels["match_logs"].id:
                 return
-            
+
             channel = self.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             del channel
@@ -635,7 +686,7 @@ def start(services, session):
                                 description=f"**Отмена матча**\n"
                                             f"**Написал команду: <@{author[0]}>**\n"
                                             f"**Отменил матч: {payload.member.mention}**\n"
-                                            f"ID: `{messageID[0]}`",
+                                            f"**ID: `{messageID[0]}`**",
                                 color=3553599)
                     await message.edit(embed=emb)
                     await message.clear_reactions()
