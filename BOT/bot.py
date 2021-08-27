@@ -573,6 +573,7 @@ def start(services, session):
 
                         if startTime < transaction[2]:
                             if transaction[3] == "+30" and nickname[-1] in transaction[-2]:
+                                del transaction
                                 userList = services["bot"].spreadsheets().values().get(spreadsheetId=sheet,
                                                                                        range=f'userlist!A2:B150',
                                                                                        majorDimension='ROWS'
@@ -584,6 +585,7 @@ def start(services, session):
 
                                 for num, team in enumerate(userList["values"]):
                                     if team[0].lower() == role.name.lower():
+                                        del userList
                                         services["bot"].spreadsheets().values().batchUpdate(
                                             spreadsheetId=sheet,
                                             body={"valueInputOption": "USER_ENTERED",
