@@ -9,7 +9,6 @@ from Cybernator import Paginator
 from discord import Client, Embed, Intents
 from memory_profiler import memory_usage
 from BOT.config import token, channels, minecupRoles
-from BOT.login import login
 
 
 def start(services, session):
@@ -277,7 +276,6 @@ def start(services, session):
                 return
 
         async def on_message(self, message):
-            global session
             if message.author.bot:
                 return
 
@@ -597,16 +595,12 @@ def start(services, session):
                         soup = BeautifulSoup(payload.text, 'lxml')
                         transaction = soup.find_all("tr")
                         if not transaction:
-                            session = login()
-                            payload = session.get("https://cp.vimeworld.ru/real?paylog")
-                            soup = BeautifulSoup(payload.text, 'lxml')
-                            transaction = soup.find_all("tr")
-                            if not transaction:
-                                await message.channel.send(embed=Embed(title="══₪ Добавление игроков ₪══",
-                                                                       description=f"Личный кабинет упал.",
-                                                                       color=3553599))
-                                return
-                            
+                            await message.channel.send(embed=Embed(title="══₪ Добавление игроков ₪══",
+                                                                   description=f"Личный кабинет упал. "
+                                                                               f"Добавление игрока через транзакции невозможна",
+                                                                   color=3553599))
+                            return
+
                         transaction = transaction[1].text.split("\n")
                         transaction[2] = transaction[2].split()
                         del soup, payload
