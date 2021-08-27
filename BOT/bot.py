@@ -476,7 +476,7 @@ def start(services, session):
                         for minecupRole in minecupRoles:
                             if role == minecupRoles[minecupRole] and role != minecupRoles["ss"]:
                                 now = datetime.now()
-                                if now.hour:
+                                if 9 < now.hour < 20:
                                     del now
 
                                     mess = message.content.split()
