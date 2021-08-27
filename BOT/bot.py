@@ -281,7 +281,7 @@ def start(services, session):
             if message.author.bot:
                 return
 
-            if message.guild and minecupRoles["tech"] in message.author.roles:
+            if message.guild:
                 if minecupRoles["tech"] in message.author.roles and message.content == "*status":
                     await message.channel.send(f"MiB: {memory_usage()[0]}")
                     return
