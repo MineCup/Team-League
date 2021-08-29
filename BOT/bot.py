@@ -311,6 +311,8 @@ def start(services, session):
                     category = None
                     if len(info) > 2:
                         category = message.guild.get_channel(int(info[2]))
+                        if len(category.channels) == 50:
+                            category = None
 
                     chan = await message.guild.create_voice_channel(name=info[1], category=category)
                     await chan.set_permissions(message.guild.default_role, connect=False, view_channel=True)
