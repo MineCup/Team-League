@@ -394,7 +394,7 @@ def start(services, session):
 
                     helpers = services["bot"].spreadsheets().values().get(
                         spreadsheetId=sheet,
-                        range=f'helpers!A2:E159',
+                        range=f'helpers!A3:E159',
                         majorDimension='ROWS'
                     ).execute()
 
@@ -406,7 +406,7 @@ def start(services, session):
                         await helperVariant(message, variant, helpers["values"], answerVariant[0])
 
                     else:
-                        variant = re.search(r'\d+', str(message.author.id))[0]
+                        variant = re.search(r'\d+', str(message.content[4:]))[0]
                         if f"<@{variant}>" == message.content[4:] or f"<@!{variant}>" == message.content[4:]:
                             await helperVariant(message, variant, helpers["values"], answerVariant[1])
                         else:
