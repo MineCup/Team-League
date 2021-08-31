@@ -99,13 +99,13 @@ def start(services, session):
 
     async def helperVariant(message, variant, helpers, answer):
         for helper in helpers:
-            if variant == helper[2] or variant == helper[1]:
+            if variant == helper[2] or variant.lower() == helper[1].lower().replace(" "):
                 emb = Embed(title=f"═══₪ {helper[1]} ₪═══",
                             url=f"https://vk.com/{helper[0][1:]}",
                             description=f"""**Discord: <@{helper[2]}>
                 Проведено игр: `{helper[3]}`
                 Предупреждений: `{helper[4]}`**""", color=3553599)
-                emb.set_thumbnail(url=f"https://skin.vimeworld.ru/helm/3d/{helper[1]}.png")
+                emb.set_thumbnail(url=f"https://skin.vimeworld.ru/helm/3d/{helper[1].replace(' ')}.png")
                 await message.channel.send(embed=emb)
                 return
         await message.channel.send(answer)
@@ -391,22 +391,26 @@ def start(services, session):
                 if message.content.startswith("/tl") and message.channel.id in bw_ids:
                     answerVariant = [f"Вы не помощник Team League.",
                                      f"Помощник с идентификатором `{message.content[4:]}` не обнаружен."]
+
                     helpers = services["bot"].spreadsheets().values().get(
                         spreadsheetId=sheet,
                         range=f'helpers!A2:E159',
                         majorDimension='ROWS'
-                    ).execute()["values"]
+                    ).execute()
+
+                    if "values" not in helpers:
+                        return
 
                     if message.content == "/tl":
                         variant = re.search(r'\d+', str(message.author.id))[0]
-                        await helperVariant(message, variant, helpers, answerVariant[0])
+                        await helperVariant(message, variant, helpers["values"], answerVariant[0])
 
                     else:
                         variant = re.search(r'\d+', str(message.author.id))[0]
                         if f"<@{variant}>" == message.content[4:] or f"<@!{variant}>" == message.content[4:]:
-                            await helperVariant(message, variant, helpers, answerVariant[1])
+                            await helperVariant(message, variant, helpers["values"], answerVariant[1])
                         else:
-                            await helperVariant(message, message.content[4:], helpers, answerVariant[1])
+                            await helperVariant(message, message.content[4:], helpers["values"], answerVariant[1])
                     return
 
                 if message.content.startswith("/team") and message.channel.id in bw_ids:
