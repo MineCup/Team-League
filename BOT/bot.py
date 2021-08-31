@@ -99,13 +99,13 @@ def start(services, session):
 
     async def helperVariant(message, variant, helpers, answer):
         for helper in helpers:
-            if variant == helper[2] or variant.lower() == helper[1].lower().replace(" "):
+            if variant == helper[2].replace(" ", "") or variant.lower() == helper[1].lower().replace(" ", ""):
                 emb = Embed(title=f"═══₪ {helper[1]} ₪═══",
                             url=f"https://vk.com/{helper[0][1:]}",
                             description=f"""**Discord: <@{helper[2]}>
                 Проведено игр: `{helper[3]}`
                 Предупреждений: `{helper[4]}`**""", color=3553599)
-                emb.set_thumbnail(url=f"https://skin.vimeworld.ru/helm/3d/{helper[1].replace(' ')}.png")
+                emb.set_thumbnail(url=f"https://skin.vimeworld.ru/helm/3d/{helper[1].replace(' ', '')}.png")
                 await message.channel.send(embed=emb)
                 return
         await message.channel.send(answer)
