@@ -477,7 +477,7 @@ def start(services, session):
 
                     await ratingShow(message, prating, ratePage)
 
-                if message.content.startswith("/battle") and message.channel == channels["team_league"]:
+                if message.content.startswith("/battle") and message.channel == channels["team_league"] and 1 == 2:
                     for role in message.author.roles:
                         for minecupRole in minecupRoles:
                             if role == minecupRoles[minecupRole] and role != minecupRoles["ss"]:
