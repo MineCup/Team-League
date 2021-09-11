@@ -302,7 +302,7 @@ def start(services, session):
 
                     wait = await message.channel.send("Идет процесс создания роли...")
 
-                    permRoles = [minecupRoles["ss"], minecupRoles["helper2"], minecupRoles["org"], minecupRoles["org2"],
+                    permRoles = [minecupRoles["ss"], minecupRoles["org"], minecupRoles["org2"],
                                  await message.guild.create_role(name=info[1],
                                                                  colour=0x787d85,
                                                                  mentionable=True)]
