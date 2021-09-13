@@ -221,7 +221,7 @@ def start(services, session):
                 nicknames += f'🔴 **`{team["Members"]["Nickname"][i]}`**\n'
         emb = Embed(title=f'**══₪ {team["Name"]} ₪══**',
                     description=nicknames, color=3553599)
-        emb.set_footer(text=f'Рейтинг: {team["Rating"]} [{team["Position"]}/{len(rateList["values"]) + 1}]\n'
+        emb.set_footer(text=f'Рейтинг: {team["Rating"]} [{team["Position"]}/{len(rateList["values"])}]\n'
                             f'Игр: {team["Games"]}\n'
                             f'Звание: {team["Rank"]}\n'
                             f'Предупреждений: {team["Warnings"]}\n'
