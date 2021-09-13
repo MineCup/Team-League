@@ -139,6 +139,9 @@ def start(services, session):
                 return members
 
     async def checkTeam(message, name):
+        if " " == name[0]:
+            name = name[1:]
+        
         userList = services["bot"].spreadsheets().values().get(spreadsheetId=sheet,
                                                                range=f'userlist!A2:D250',
                                                                majorDimension='ROWS'
