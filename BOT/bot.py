@@ -409,11 +409,15 @@ def start(services, session):
                         await helperVariant(message, variant, helpers["values"], answerVariant[0])
 
                     else:
-                        variant = re.search(r'\d+', str(message.content[4:]))[0]
+                        variant = re.search(r'\d+', str(message.content[4:]))
+                        if variant is None:
+                            await helperVariant(message, message.content[4:], helpers["values"], answerVariant[1])
+                            return
                         if f"<@{variant}>" == message.content[4:] or f"<@!{variant}>" == message.content[4:]:
                             await helperVariant(message, variant, helpers["values"], answerVariant[1])
                         else:
                             await helperVariant(message, message.content[4:], helpers["values"], answerVariant[1])
+                            
                     return
 
                 if message.content.startswith("/team") and message.channel.id in bw_ids:
