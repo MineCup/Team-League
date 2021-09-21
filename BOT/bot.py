@@ -14,7 +14,7 @@ from BOT.config import token, channels, minecupRoles
 def start(services, session):
     sheet = "1OaMpmMMFR_NIzmqtEh12XJ6N4X9R723S4g709FKvj_8"
 
-    bw_ids = [858273631033360384, 856786815130533928]
+    bw_ids = [815244363633786910, 815487803709980682]
 
     month = ["Янв.", "Фев.", "Марта", "Апр.", "Мая", "Июня", "Июля", "Авг.", "Сент.", "Окт.", "Нояб.", "Дек."]
     month_num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
