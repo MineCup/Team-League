@@ -266,7 +266,7 @@ def start(services, session):
 
         async def on_ready(self):
             print("Discordo!")
-            guild = client.get_guild(856327254178791424)
+            guild = client.get_guild(582587958717054987)
             for channel in channels:
                 channels[channel] = guild.get_channel(channels[channel])
             for role in minecupRoles:
