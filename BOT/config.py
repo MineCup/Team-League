@@ -6,15 +6,15 @@ token = {"rucaptcha": str(environ.get("captcha")),
 user = {"login": str(environ.get('username')),
         "password": str(environ.get('password'))}
 
-channels = {"map_pool": 858026868354449468,
-            "team_league": 858273631033360384,
-            "rating": 856786719201427466,
-            "payload": 858274393321898035,
-            "roles": 858274158521352202,
-            "match_logs": 858274100380172288}
+channels = {"map_pool": 858764823550623784,
+            "team_league": 815244363633786910,
+            "rating": 815938101901525002,
+            "payload": 836007888010215454,
+            "roles": 815231226927251487,
+            "match_logs": 887056794457874443}
 
-minecupRoles = {"tech": 865158677791375381,
-                "org2": 856785723934900234,
-                "org": 856785670739984384,
-                "helper": 856785501356032000,
-                "ss": 856953030514966528}
+minecupRoles = {"tech": 853058142459789342,
+                "org2": 803793187688808508,
+                "org": 803793250103853067,
+                "helper": 834496434953912381,
+                "ss": 827620459008884756}
