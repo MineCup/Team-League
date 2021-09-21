@@ -484,7 +484,7 @@ def start(services, session):
 
                     await ratingShow(message, prating, ratePage)
 
-                if message.content.startswith("/battle") and message.channel == channels["team_league"] and 1 == 2:
+                if message.content.startswith("/battle") and message.channel == channels["team_league"]:
                     for role in message.author.roles:
                         for minecupRole in minecupRoles:
                             if role == minecupRoles[minecupRole] and role != minecupRoles["ss"]:
@@ -546,7 +546,7 @@ def start(services, session):
                                         return
                                     del checkRole
 
-                                    maps = await channels["map_pool"].fetch_message(858278776236015638)
+                                    maps = await channels["map_pool"].fetch_message(860108051037290497)
                                     choose = choice(maps.content.split("\n"))
 
                                     emb = Embed(title="════₪ TEAM LEAGUE ₪════",
