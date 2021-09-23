@@ -699,7 +699,7 @@ def start(services, session):
                     await message.clear_reactions()
 
                 else:
-                    guild = client.get_guild(856327254178791424)
+                    guild = client.get_guild(582587958717054987)
                     roles[0] = guild.get_role(int(roles[0]))
                     roles[1] = guild.get_role(int(roles[1]))
                     del guild
