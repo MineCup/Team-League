@@ -337,20 +337,20 @@ def start(services, session):
                             role = message.guild.get_role(int(message.content[3:-1]))
                         except ValueError:
                             emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
-                                        description=f"Проблема с пингом роли: `{message.content}`",
+                                        description=f"{message.author.mention}, Проблема с пингом роли: `{message.content}`",
                                         colour=3553599)
                             await message.channel.send(embed=emb)
                             return
                         if not role:
                             emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
-                                        description=f"Вы пинганули неизвестную роль: `{message.content}`",
+                                        description=f"{message.author.mention}, Вы пинганули неизвестную роль: `{message.content}`",
                                         colour=3553599)
                             await message.channel.send(embed=emb)
                             return
 
                         if str(role.color) != "#787d85":
                             emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
-                                        description=f"Роль {role.mention} не выдана. Это не командная роль.",
+                                        description=f"{message.author.mention}, Роль {role.mention} не выдана. Это не командная роль.",
                                         colour=3553599)
                             await message.channel.send(embed=emb)
                             return
@@ -364,7 +364,7 @@ def start(services, session):
                             if team[0].lower() == role.name.lower():
                                 if team[2] == "1":
                                     emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
-                                                description=f"Роль {role.mention} не выдана. Команда заблокировала выдачу роли.",
+                                                description=f"{message.author.mention}, Роль {role.mention} не выдана. Команда заблокировала выдачу роли.",
                                                 colour=3553599)
                                     await message.channel.send(embed=emb)
                                     return
@@ -377,7 +377,7 @@ def start(services, session):
                                             removed += f" {authorRole.name}"
                                     await message.author.add_roles(role)
                                     emb = Embed(title="**══₪ TEAM LEAGUE ₪══**",
-                                                description=f"Роль {role.mention} выдана.",
+                                                description=f"{message.author.mention}, Роль {role.mention} выдана.",
                                                 colour=3553599)
                                     if removed != "Убраны роли:":
                                         emb.set_footer(text=removed)
