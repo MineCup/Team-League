@@ -14,7 +14,7 @@ from BOT.config import token, channels, minecupRoles
 def start(services, session):
     sheet = "1OaMpmMMFR_NIzmqtEh12XJ6N4X9R723S4g709FKvj_8"
 
-    bw_ids = [815244363633786910, 815487803709980682]
+    bw_ids = [858273631033360384, 856786815130533928]
 
     month = ["Янв.", "Фев.", "Марта", "Апр.", "Мая", "Июня", "Июля", "Авг.", "Сент.", "Окт.", "Нояб.", "Дек."]
     month_num = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
@@ -266,7 +266,7 @@ def start(services, session):
 
         async def on_ready(self):
             print("Discordo!")
-            guild = client.get_guild(582587958717054987)
+            guild = client.get_guild(856327254178791424)
             for channel in channels:
                 channels[channel] = guild.get_channel(channels[channel])
             for role in minecupRoles:
@@ -546,7 +546,7 @@ def start(services, session):
                                         return
                                     del checkRole
 
-                                    maps = await channels["map_pool"].fetch_message(860108051037290497)
+                                    maps = await channels["map_pool"].fetch_message(858278776236015638)
                                     choose = choice(maps.content.split("\n"))
 
                                     emb = Embed(title="════₪ TEAM LEAGUE ₪════",
@@ -699,7 +699,7 @@ def start(services, session):
                     await message.clear_reactions()
 
                 else:
-                    guild = client.get_guild(582587958717054987)
+                    guild = client.get_guild(856327254178791424)
                     roles[0] = guild.get_role(int(roles[0]))
                     roles[1] = guild.get_role(int(roles[1]))
                     del guild
